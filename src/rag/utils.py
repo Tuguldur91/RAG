@@ -10,7 +10,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
 DATA_PATH = os.getenv("DATA_PATH", "data")
-CHROMA_PATH = os.getenv("CHROMA_PATH", ".rag/openai-chroma")
+CHROMA_PATH = os.getenv("CHROMA_PATH", "").strip() or ".rag/openai-chroma"
 
 
 def load(path="data"):
@@ -47,6 +47,8 @@ def load_into_vector_db(chunks):
 
     if os.path.exists(CHROMA_PATH):
         shutil.rmtree(CHROMA_PATH)
+
+    Path(CHROMA_PATH).mkdir(parents=True, exist_ok=True)
 
     embeddings = OpenAIEmbeddings()
     return Chroma.from_documents(
